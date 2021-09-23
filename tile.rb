@@ -4,17 +4,25 @@ class Tile
         @bomb = bomb
         @reveled = false
         @flagged = false
-        @neighbors = 0
+        @neighbor_mines = 0
+        @neighbors = []
     end
 
-    attr_accessor :bomb, :reveled, :neighbors
+    attr_accessor :bomb, :reveled, :neighbor_mines, :neighbors
 
     def set_mine
         @bomb = true
     end
 
-    def print_tile
+    def set_neighbor_bombs
+        bombs = 0
+        @neighbors.each { |neighbor| bombs += 1 if neighbor.bomb == true }
+        @neighbor_mines = bombs
+    end
 
+    def recieve_neighbors(neighbors)
+        @neighbors = neighbors
+        set_neighbor_bombs
     end
 
 end
