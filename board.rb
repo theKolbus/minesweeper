@@ -4,28 +4,38 @@ require_relative 'tile'
 class Board
 
     def initialize(size = 9, mines = 10)
-        @board = Array.new(size) { Array.new(size) {Tile.new} }
-    end
-    
-    def get_random_tile
-        indeexes = @board.length
-        row = rand(indeexes)
-        col = rand(indeexes)
-        @board[row][col]
+        @size = size
+        @mines = mines
+        @board = []
+        create_board(size, mines)
     end
 
-    def lay_mines(mines = 10)
-        mines_left = mines
+    def create_board(size, mines)
+        empty = (size * size) - mines
+        values = Array.new(empty, false) + Array.new(mines, true)
+        values.shuffle!
+        board = []
+        size.times {
+            row = []
+            size.times {row << Tile.new(values.pop)}
+            board << row
+        }
+        @board = board
+    end
 
-        until mines_left == 0
-            tile = get_random_tile
-            if tile.bomb == false
-                tile.set_mine
-                mines_left -= 1
+    def print_board
+        puts "  0 1 2 3 4 5 6 7 8"
+        @board.each_with_index do |row, index|
+            print index
+            row.each do |tile|
+                next print " *" if tile.bomb == true
+                next print " /" if tile.reveled == false
+                next print " F" if tile.flagged == true
+                print tile.neighbors
             end
-            puts "mines left: #{mines_left}"
+            puts
         end
-
+        return
     end
 
 end

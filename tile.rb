@@ -7,10 +7,14 @@ class Tile
         @neighbors = 0
     end
 
-    attr_accessor :bomb
+    attr_accessor :bomb, :reveled, :neighbors
 
     def set_mine
         @bomb = true
+    end
+
+    def print_tile
+
     end
 
 end
