@@ -8,7 +8,7 @@ class Tile
         @neighbors = []
     end
 
-    attr_accessor :bomb, :reveled, :neighbor_mines, :neighbors
+    attr_accessor :bomb, :reveled, :flagged, :neighbor_mines, :neighbors
 
     def set_mine
         @bomb = true
@@ -23,6 +23,20 @@ class Tile
     def recieve_neighbors(neighbors)
         @neighbors = neighbors
         set_neighbor_bombs
+    end
+
+    def reveal
+        return puts "Square is Flagged" if @flagged
+        @reveled = true
+        if @neighbor_mines == 0
+            free_neighbors = @neighbors.select{|tile| !tile.reveled && !tile.bomb}
+            free_neighbors.each{|tile| tile.reveal}
+        end
+    end
+
+    def flag
+        return puts "Already Flagged" if @flagged
+        @flagged = !@flagged
     end
 
 end
